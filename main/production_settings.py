@@ -1,11 +1,6 @@
-"""
-This settings file is for production, it will automatically be used
-when you are in production environment.
-"""
-
-
 import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +20,8 @@ ALLOWED_HOSTS = ["*"]
 
 # Edit the following line and place your railway URL, and your custom URL in the array.
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.up.railway.app", 
-    # NOTE: Place your custom url here if any
+    "https://api.admin-tools.de",
+    "https://app.admin-tools.de",
 ]
 
 
@@ -39,8 +34,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
-    "corsheaders",
+
+    # Third party apps
+    'rest_framework',
+    'djoser',
+    'rest_framework_simplejwt',
+    'corsheaders',
+
+    # Local apps
+    'iserv',
+    'divis',
+    'files'
 ]
 
 MIDDLEWARE = [
@@ -113,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "de-de"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Berlin"
 
 USE_I18N = True
 
@@ -133,3 +137,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', # Nur authentifizierte Nutzer dürfen die API nutzen
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # Authentifizierung über JWT
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend', # Hinzufügen von Django Filters
+    ],
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}

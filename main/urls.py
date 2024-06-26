@@ -1,21 +1,31 @@
-"""main URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
+from iserv.views import upload_account_data, check_for_duplicates
+from divis.views import upload_teacher_data, upload_classes_data
+
+from .test import download_iserv_import
+
+# Customizing Admin panel
+admin.site.site_header = 'Admin Tools - Datenbank'
+admin.site.site_title = 'Admin Tools - Datenbank'
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # Admin panel and API authentication
+    path('admin/', admin.site.urls),
+    path('auth/', include('djoser.urls')), # URL für die Authentifizierung
+    path('auth/', include('djoser.urls.jwt')), # URL für die Authentifizierung
+
+    # API endpoints
+    path('divis/', include('divis.urls')),
+    path('iserv/', include('iserv.urls')),
+
+    # File upload and processing endpoints
+    path('upload/iserv/accounts', upload_account_data),
+    path('upload/divis/teachers', upload_teacher_data),
+    path('upload/divis/classes', upload_classes_data),
+    path('process/check-for-duplicates', check_for_duplicates),
+
+    # Generate CSV file from database data
+    path('download/iserv/importfile', download_iserv_import),
 ]
