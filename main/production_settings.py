@@ -24,7 +24,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://app.admin-tools.de",
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -156,3 +155,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "https://api.admin-tools.de",
+    "https://app.admin-tools.de",
+]
