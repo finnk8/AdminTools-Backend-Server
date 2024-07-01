@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Teacher, Student, Class, Settings
+from .models import Teacher, Student, Class, Settings, Mother, Father
 
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,4 +25,14 @@ class StudentSerializer(serializers.ModelSerializer):
     classes = MinimalClassSerializer(many=True, read_only=True)
     class Meta:
         model = Student
+        fields = '__all__'
+
+class MotherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mother
+        fields = '__all__'
+
+class FatherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Father
         fields = '__all__'

@@ -4,8 +4,8 @@ from django.conf import settings
 from django.http import JsonResponse
 import json
 
-from .models import Teacher, Student, Class
-from .serializers import TeacherSerializer, StudentSerializer, ClassSerializer
+from .models import Teacher, Student, Class, Mother, Father
+from .serializers import TeacherSerializer, StudentSerializer, ClassSerializer, MotherSerializer, FatherSerializer
 
 def process_divis_teacher_csv(file_name):
     try:
@@ -114,7 +114,34 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
                     city=ort,
                     eduport_mail=eduport_email
                 )
-                class_students.append(student)
+                if vorname_mutter != '' and nachname_mutter != '':
+                    if Mother.objects.filter(first_name=vorname_mutter, last_name=nachname_mutter, email=email_mutter).exists():
+                        mother = Mother.objects.get(first_name=vorname_mutter, last_name=nachname_mutter, email=email_mutter)
+                        new_child_array = json.loads(mother.child)
+                        new_child_array.append(student.id)
+                        mother.child = json.dumps(new_child_array)
+                        mother.save()
+                    else:
+                        mother = Mother.objects.create(
+                            first_name=vorname_mutter,
+                            last_name=nachname_mutter,
+                            email=email_mutter,
+                            child = json.dumps([student.id])
+                        )
+                if vorname_vater != '' and nachname_vater != '':
+                    if Father.objects.filter(first_name=vorname_vater, last_name=nachname_vater, email=email_vater).exists():
+                        father = Father.objects.get(first_name=vorname_vater, last_name=nachname_vater, email=email_vater)
+                        new_child_array = json.loads(father.child)
+                        new_child_array.append(student.id)
+                        father.child = json.dumps(new_child_array)
+                        father.save()
+                    else:
+                        father = Father.objects.create(
+                            first_name=vorname_vater,
+                            last_name=nachname_vater,
+                            email=email_vater,
+                            child = json.dumps([student.id])
+                        )
             else:
                 # Füge Schüler aus Datenbank der Liste der Schüler hinzu
                 student = Student.objects.get(last_name=nachname, first_name=vorname, birth_date=geburtsdatum)
@@ -174,17 +201,27 @@ def process_divis_classes_csv(file_name, request_data):
 
         extracted_classes = ClassSerializer(return_classes, many=True).data
         extracted_students = StudentSerializer(set(return_students), many=True).data
+        extracted_mothers = MotherSerializer(Mother.objects.all(), many=True).data
+        extracted_fathers = FatherSerializer(Father.objects.all(), many=True).data
 
         for _class in return_classes:
             _class.delete()
         
         for student in return_students:
             student.delete()
-
+            
+        for mother in Mother.objects.all():
+            mother.delete()
+        
+        for father in Father.objects.all():
+            father.delete()
+        
         return JsonResponse({
             'status': 200,
             'extracted_classes': extracted_classes,
             'extracted_students': extracted_students,
+            'extracted_mothers': extracted_mothers,
+            'extracted_fathers': extracted_fathers
         })
 
     except Exception as e:

@@ -137,6 +137,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Djoser settings
+
+DJOSER = {
+    'USER_CREATE': False,
+    'SERIALIZERS': {
+        'current_user': 'main.serializers.CustomCurrentUserSerializer',
+    }
+}
+
 # Django REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

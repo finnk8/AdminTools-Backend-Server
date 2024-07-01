@@ -3,13 +3,14 @@ from django.conf import settings
 from django.http import JsonResponse
 from difflib import SequenceMatcher
 
-from iserv.serializers import ExistingAccountSerializer
+from iserv.serializers import ExistingAccountSerializer, IservGroupSerializer
 from .models import IservGroup, ExistingAccount
 
 
 def process_iserv_exported_users_csv(file_name):
     try:
         return_accounts = [] # Hier wird die Liste der neuen Accounts gespeichert, die in der CSV-Datei gefunden wurden
+        return_groups = [] # Hier wird die Liste der neuen Gruppen gespeichert, die in der CSV-Datei gefunden wurden
 
         with open(os.path.join(settings.BASE_DIR, file_name), 'r', encoding='utf-8') as file:
             reader = csv.reader(file, delimiter=';')
@@ -26,6 +27,7 @@ def process_iserv_exported_users_csv(file_name):
                         continue
                     gruppe, _ = IservGroup.objects.get_or_create(group_name=gruppe_str)
                     gruppen_objs.append(gruppe)
+                    return_groups.append(gruppe)
                 
                 # Speichern des Accounts, falls er nicht existiert
                 account = ExistingAccount.objects.create(
@@ -44,8 +46,10 @@ def process_iserv_exported_users_csv(file_name):
                 account.groups.set(gruppen_objs)
                 account.save()
                 return_accounts.append(account)
+
         
         extracted_accounts = ExistingAccountSerializer(return_accounts, many=True).data
+        extracted_groups = IservGroupSerializer(list(dict.fromkeys(return_groups)), many=True).data
 
         # Clean up accounts, so no data is left behind
         for account in return_accounts:
@@ -59,6 +63,7 @@ def process_iserv_exported_users_csv(file_name):
         return JsonResponse({
             'status': 200,
             'accounts': extracted_accounts,
+            'iserv_groups': extracted_groups
         })
     except Exception as e:
         return JsonResponse({

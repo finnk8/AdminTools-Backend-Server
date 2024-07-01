@@ -18,7 +18,7 @@ class Teacher(models.Model):
 
 class Student(models.Model):
     iserv_account = models.CharField(max_length=100, blank=True, null=True)
-
+        
     last_name = models.CharField(max_length=100, blank=True, null=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
@@ -35,7 +35,7 @@ class Student(models.Model):
         return self.first_name + ' ' + self.last_name + ' (' + self.class_name + ')'
     
 class Mother(models.Model):
-    child = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    child = models.CharField(max_length=100, blank=True, null=True)
 
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
@@ -45,7 +45,7 @@ class Mother(models.Model):
         return self.first_name + ' ' + self.last_name
 
 class Father(models.Model):
-    child = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    child = models.CharField(max_length=100, blank=True, null=True)
 
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
