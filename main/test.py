@@ -36,16 +36,24 @@ def generate_csv_from_database_data(data):
         
         # Write rows
         for student in students:
-            if student['iserv_account'] != '':
-                iserv_account = next((item for item in iserv_accounts if float(item["id"]) == float(student['iserv_account'])), None)
+            student_iserv_id = student.get('iserv_account', '')
+            if student_iserv_id:
+                iserv_account = None
+                for account in iserv_accounts:
+                    if account.get('id') == student_iserv_id:
+                        iserv_account = account
+                        break
             else:
                 iserv_account = None
-            if student['classes'] != '':
-                group_names = [] 
-                for _class in student['classes']:
-                    group_names.append(next((item for item in classes if float(item["id"]) == float(_class['id'])), None)['iserv_group_name'])
-                csv_classes = ';'.join([str(cls) for cls in group_names])
-            
+            try:
+                if student['classes'] != '':
+                    group_names = [] 
+                    for _class in student['classes']:
+                        group_names.append(next((item for item in classes if item["id"] == _class['id']), None)['iserv_group_name'])
+                    csv_classes = ';'.join([str(cls) for cls in group_names])
+            except:
+                csv_classes = ''
+                            
             row = [
                 iserv_account['import_id'] if iserv_account else '',
                 student['first_name'] if student['first_name'] else '',

@@ -56,7 +56,8 @@ def extract_teacher_data(line, teachers):
             if i['first_name'] == teacher_first_name and i['last_name'] == teacher_last_name:
                 return i['id'], i['abbreviation']
     except Exception as e:
-        print(f"Error extracting teacher data: {e}")
+        print('Error:')
+        print(e)
     return None, None
 
 def process_and_save_class(classdata, teachers, iserv_accounts):
@@ -99,9 +100,9 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
                 iserv_account = ''
                 for i in iserv_accounts:
                     if i['first_name'] == vorname and i['last_name'] == nachname:
-                        iserv_account = str(i['id'])
+                        iserv_account = i['id']
                 student = Student.objects.create(
-                    iserv_account=iserv_account,
+                    iserv_account=iserv_account if iserv_account != '' else None,
                     last_name=nachname,
                     first_name=vorname,
                     gender=geschlecht,
@@ -149,7 +150,7 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
         else:
             # Error handling wenn die Zeile nicht genügend Werte hat
             print("ERROR: Row doesn't have enough values")
-            print("Skipping row:", row)
+            print("Skipping row:")
 
     schoolyear_prefix = "2425"
     # Speichere den Kurs
