@@ -4,7 +4,7 @@ from django.urls import include, path
 from iserv.views import upload_account_data, check_for_duplicates
 from divis.views import upload_teacher_data, upload_classes_data
 
-from .test import download_iserv_import
+from .utils import download_iserv_import, download_iserv_import_parents
 
 # Customizing Admin panel
 admin.site.site_header = 'Admin Tools - Datenbank'
@@ -28,4 +28,5 @@ urlpatterns = [
 
     # Generate CSV file from database data
     path('download/iserv/importfile', download_iserv_import),
+    path('download/iserv/importfile_parents', download_iserv_import_parents),
 ]
