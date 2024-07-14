@@ -12,7 +12,7 @@ admin.site.site_title = 'Admin Tools - Datenbank'
 
 urlpatterns = [
     # Admin panel and API authentication
-    path('admin/', admin.site.urls), # URL für das Admin-Panel
+    path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')), # URL für die Authentifizierung
     path('auth/', include('djoser.urls.jwt')), # URL für die Authentifizierung
 
