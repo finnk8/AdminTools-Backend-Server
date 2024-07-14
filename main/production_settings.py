@@ -1,3 +1,4 @@
+# This file contains the production settings for the Django project. It is used when the project is deployed to a production environment. The settings in this file are optimized for production use and should not be used in a development environment.
 import os
 from pathlib import Path
 from datetime import timedelta
