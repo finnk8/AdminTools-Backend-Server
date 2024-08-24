@@ -79,7 +79,8 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
 
     # Fehlerbehandlung, wenn kein Lehrer gefunden wurde
     if teacher1 is None and teacher2 is None:
-        teacher_error_message = f"{classdata[:2]}"
+        while i in classdata != 'Nr.;Nachname;Vorname;Geschlecht;Geburtsdatum;Klassenname;Klassenstufe;Telefon;Straße;PLZ;Ort;EduPort-E-Mail;Vorname Mutter;Nachname Mutter;E-Mail Mutter;Vorname Vater;Nachname Vater;E-Mail Vater':
+            teacher_error_message += i
         teacher_line_count = 1
 
     # Extrahiere Kursnamen
