@@ -16,7 +16,10 @@ def process_iserv_exported_users_csv(file_name):
             reader = csv.reader(file, delimiter=';')
             next(reader)  # Springe zur zweiten Zeile, um die Header-Zeile zu überspringen
             
+            row_index = 2
             for row in reader:
+                print(row_index)
+                row_index += 1
                 account, first_name, last_name, status, created_at, created_by, internal_id, user_type, import_id, class_information, email, groups_str = row
                 gruppen_data = groups_str.split(',')
                 
