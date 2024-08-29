@@ -76,18 +76,20 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
         if "Herr" in classdata[1] or "Frau" in classdata[1]:
             teacher2, teacher_abbr2 = extract_teacher_data(classdata[1], teachers)
             teacher_line_count = 2
-
     # Fehlerbehandlung, wenn kein Lehrer gefunden wurde
     if teacher1 is None and teacher2 is None:
-        while i in classdata != 'Nr.;Nachname;Vorname;Geschlecht;Geburtsdatum;Klassenname;Klassenstufe;Telefon;Straße;PLZ;Ort;EduPort-E-Mail;Vorname Mutter;Nachname Mutter;E-Mail Mutter;Vorname Vater;Nachname Vater;E-Mail Vater':
-            teacher_error_message += i
-        teacher_line_count = 1
-
+        try:
+            while i in classdata != 'Nr.;Nachname;Vorname;m/w;Geburtsdatum;Klassenname;Klassenstufe;Telefon;Straße;PLZ;Ort;eduPort-Mailadresse;Vorname (Mutter);Nachname (Mutter);E-Mail (Mutter);Vorname (Vater);Nachname (Vater);E-Mail (Vater)':
+                teacher_error_message += i
+        except Exception as e:
+            teacher_error_message = classdata[0:2]
     # Extrahiere Kursnamen
     classname_line = classdata[teacher_line_count]
     classname = classname_line.split(';')[0]
 
     # Extrahiere die Schülerdaten ab der entsprechenden Zeile
+    if teacher_line_count + 2 >= len(classdata):
+        return None, None
     class_students = []
     class_student_data = '\n'.join(classdata[teacher_line_count + 2:])
 
@@ -227,6 +229,11 @@ def process_divis_classes_csv(file_name, request_data):
         })
 
     except Exception as e:
+        print('------')
+        print('Error in process_divis_classes_csv:')
+        print('Error: ' + str(e))
+        print('Daten: ' + str(kursdaten))
+        print('------')
         return JsonResponse({
             'status': 500,
             'error': 'Die Datei scheint nicht das richtige Format zu haben. Bitte überprüfen Sie die Datei und versuchen Sie es erneut.',
