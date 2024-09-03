@@ -16,18 +16,24 @@ def process_divis_teacher_csv(file_name):
             next(reader)  # Springe zur zweiten Zeile, um die Header-Zeile zu überspringen
 
             for row in reader:
-                first_name, last_name, gender, birth_date, abbreviation = row
+                try:
+                    first_name, last_name, gender, birth_date, abbreviation = row
 
-                # Speichern des Accounts
-                teacher = Teacher.objects.create(
-                    first_name=first_name,
-                    last_name=last_name,
-                    gender=gender,
-                    birth_date=birth_date,
-                    abbreviation=abbreviation
-                )
-                teacher.save()
-                return_teachers.append(teacher)
+                    # Speichern des Accounts
+                    teacher = Teacher.objects.create(
+                        first_name=first_name,
+                        last_name=last_name,
+                        gender=gender,
+                        birth_date=birth_date,
+                        abbreviation=abbreviation
+                    )
+                    teacher.save()
+                    return_teachers.append(teacher)
+                except Exception as e:
+                    print('Error:')
+                    print(e)
+                    print('Row:')
+                    print(row)
         
         extracted_teachers = TeacherSerializer(return_teachers, many=True).data
 
