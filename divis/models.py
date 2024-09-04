@@ -58,7 +58,7 @@ class Class(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     iserv_group_name = models.CharField(max_length=100, blank=True, null=True)
     teacher = models.CharField(max_length=100, blank=True, null=True)
-    teacher_error_message = models.CharField(max_length=100, blank=True, null=True)
+    teacher_error_message = models.TextField(blank=True, null=True)
     students = models.ManyToManyField(Student, blank=True, related_name='classes')
 
     def __str__(self):
