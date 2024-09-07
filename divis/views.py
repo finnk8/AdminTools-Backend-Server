@@ -34,6 +34,7 @@ class ClassViewSet(ModelViewSet):
     filter_fields = '__all__'
     search_fields = ('name',)
 
+@api_view(['POST'])
 @csrf_exempt
 def upload_teacher_data(request):
     if request.method == 'POST' and request.FILES.get('file'):
@@ -41,7 +42,7 @@ def upload_teacher_data(request):
         # Speichern der Datei in der Datenbank
         uploaded_file_object = UploadedFile.objects.create(file=uploaded_file)
         # Prozessierung der Datei
-        return process_divis_teacher_csv(uploaded_file_object.file.name)
+        return process_divis_teacher_csv(uploaded_file_object.file.name, request.data)
     else:
         return HttpResponse(status=405, content='Method Not Allowed')
     
@@ -51,10 +52,8 @@ def upload_teacher_data(request):
 def upload_classes_data(request):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
-
         # Save the uploaded file to the database
         uploaded_file_object = UploadedFile.objects.create(file=uploaded_file)
-        
         # Process the file
         return process_divis_classes_csv(uploaded_file_object.file.name, request.data)
     else:

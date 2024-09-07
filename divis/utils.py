@@ -7,8 +7,9 @@ import json
 from .models import Teacher, Student, Class, Mother, Father
 from .serializers import TeacherSerializer, StudentSerializer, ClassSerializer, MotherSerializer, FatherSerializer
 
-def process_divis_teacher_csv(file_name):
+def process_divis_teacher_csv(file_name, request_data):
     try:
+        iserv_accounts = json.loads(request_data['iserv_accounts'])
         return_teachers = [] # Hier wird die Liste der neuen Lehrer gespeichert, die in der CSV-Datei gefunden wurden
 
         with open(os.path.join(settings.BASE_DIR, file_name), 'r', encoding='utf-8') as file:
@@ -19,8 +20,15 @@ def process_divis_teacher_csv(file_name):
                 try:
                     first_name, last_name, gender, birth_date, abbreviation = row
 
+                    iserv_account_id = None
+                    for i in iserv_accounts:
+                        if i['first_name'] == first_name and i['last_name'] == last_name:
+                            iserv_account_id = i['id']
+
+                    
                     # Speichern des Accounts
                     teacher = Teacher.objects.create(
+                        iserv_account=iserv_account_id,
                         first_name=first_name,
                         last_name=last_name,
                         gender=gender,

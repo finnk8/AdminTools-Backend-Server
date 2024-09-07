@@ -7,6 +7,8 @@ class Settings(models.Model):
     clear_existing_data = models.BooleanField(default=False)
 
 class Teacher(models.Model):
+    iserv_account = models.IntegerField(blank=True, null=True)
+    
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
@@ -17,7 +19,7 @@ class Teacher(models.Model):
         return self.first_name + ' ' + self.last_name + ' (' + self.abbreviation + ')'
 
 class Student(models.Model):
-    iserv_account = models.IntegerField(max_length=100, blank=True, null=True)
+    iserv_account = models.IntegerField(blank=True, null=True)
 
     last_name = models.CharField(max_length=100, blank=True, null=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
