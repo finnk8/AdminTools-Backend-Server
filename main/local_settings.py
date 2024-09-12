@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     # Local apps#
     "divis",
     "iserv",
-    "files"
+    "files",
+    "profiles",
 ]
 
 MIDDLEWARE = [
@@ -138,8 +139,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DJOSER = {
     'USER_CREATE': False,
     'SERIALIZERS': {
-        'current_user': 'main.serializers.CustomCurrentUserSerializer',
+        'user': 'profiles.serializers.CustomUserSerializer',
+        'current_user': 'profiles.serializers.CustomUserSerializer',  # for /me/ route
     }
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'profiles.serializers.CustomUserSerializer',
 }
 
 # Django REST Framework settings

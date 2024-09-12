@@ -66,6 +66,13 @@ def process_iserv_exported_users_csv(file_name):
             'iserv_groups': extracted_groups
         })
     except Exception as e:
+        for account in return_accounts:
+            for group in account.groups.all():
+                try:
+                    IservGroup.objects.get(group_name=group).delete()
+                except:
+                    pass
+            account.delete()
         return JsonResponse({
             'status': 500,
             'error': 'Die Datei scheint nicht das richtige Format zu haben. Bitte überprüfen Sie die Datei und versuchen Sie es erneut.'

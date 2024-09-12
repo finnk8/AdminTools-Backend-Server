@@ -25,7 +25,11 @@ def generate_csv_iserv_student_import(data):
     # Query the database to retrieve data
     students = json.loads(data['students'])
     classes = json.loads(data['classes'])
-    iserv_accounts = json.loads(data['iserv_accounts'])
+    try:
+        iserv_accounts = json.loads(data['iserv_accounts'])
+    except:
+        iserv_accounts = []
+    schoolyear_prefix = json.loads(data['settings']).get('schoolyearPrefix')
 
     # Define the headers for your CSV file
     headers = ['Import ID', 'Vorname', 'Nachname', 'Klasse', 'Gruppen']
@@ -54,7 +58,9 @@ def generate_csv_iserv_student_import(data):
                 iserv_account = None
             try:
                 if student['classes'] != '':
-                    group_names = [] 
+                    group_names = []
+                    if student['class_name']:
+                        group_names.append(str('j'+schoolyear_prefix+'.'+student['class_name'].replace(' ', '').replace('/','').lower())) 
                     for _class in student['classes']:
                         group_names.append(next((item for item in classes if item["id"] == _class['id']), None)['iserv_group_name'])
                     csv_classes = ';'.join([str(cls) for cls in group_names])

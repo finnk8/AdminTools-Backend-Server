@@ -54,8 +54,8 @@ def process_divis_teacher_csv(file_name, request_data):
         })
     
     except Exception as e:
-        print('Error:')
-        print(e)
+        for teacher in return_teachers:
+            teacher.delete()
         return JsonResponse({
             'status': 500,
             'error': 'Die Datei scheint nicht das richtige Format zu haben. Bitte überprüfen Sie die Datei und versuchen Sie es erneut.',
@@ -74,7 +74,7 @@ def extract_teacher_data(line, teachers):
         print(e)
     return None, None
 
-def process_and_save_class(classdata, teachers, iserv_accounts):
+def process_and_save_class(classdata, teachers, iserv_accounts, schoolyear_prefix):
     if len(classdata) <= 2:
         return None, None
 
@@ -169,7 +169,6 @@ def process_and_save_class(classdata, teachers, iserv_accounts):
             print("ERROR: Row doesn't have enough values")
             print("Skipping row:")
 
-    schoolyear_prefix = "2425"
     # Speichere den Kurs
     if teacher1 is None and teacher2 is None:
         new_class = Class.objects.create(
@@ -207,7 +206,7 @@ def process_divis_classes_csv(file_name, request_data):
                 if line == ';;;;;;;;;;;;;;;;;':
                     # Wenn kursdaten nicht leer ist, verarbeite und speichere die Kursdaten
                     if kursdaten:
-                        new_class, class_students = process_and_save_class(kursdaten, json.loads(request_data['teachers']), json.loads(request_data['iserv_accounts']))
+                        new_class, class_students = process_and_save_class(kursdaten, json.loads(request_data['teachers']), json.loads(request_data['iserv_accounts']), json.loads(request_data['settings']).get('schoolyearPrefix'))
                         if new_class and class_students is not None: 
                             return_classes.append(new_class)
                             return_students.extend(class_students)
@@ -243,11 +242,22 @@ def process_divis_classes_csv(file_name, request_data):
         })
 
     except Exception as e:
-        print('------')
-        print('Error in process_divis_classes_csv:')
-        print('Error: ' + str(e))
-        print('Daten: ' + str(kursdaten))
-        print('------')
+        # print('------')
+        # print('Error in process_divis_classes_csv:')
+        # print('Error: ' + str(e))
+        # print('Daten: ' + str(kursdaten))
+        # print('------')
+        for _class in return_classes:
+            _class.delete()
+        
+        for student in return_students:
+            student.delete()
+            
+        for mother in Mother.objects.all():
+            mother.delete()
+        
+        for father in Father.objects.all():
+            father.delete()
         return JsonResponse({
             'status': 500,
             'error': 'Die Datei scheint nicht das richtige Format zu haben. Bitte überprüfen Sie die Datei und versuchen Sie es erneut.',

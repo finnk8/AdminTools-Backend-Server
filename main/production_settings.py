@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # Local apps
     'iserv',
     'divis',
-    'files'
+    'files',
+    "profiles",
 ]
 
 MIDDLEWARE = [
@@ -143,7 +144,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DJOSER = {
     'USER_CREATE': False,
     'SERIALIZERS': {
-        'current_user': 'main.serializers.CustomCurrentUserSerializer',
+        'user': 'profiles.serializers.CustomUserSerializer',
+        'current_user': 'profiles.serializers.CustomUserSerializer',  # for /me/ route
     }
 }
 
@@ -164,6 +166,10 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'profiles.serializers.CustomUserSerializer',
 }
 
 CORS_ALLOWED_ORIGINS = [
