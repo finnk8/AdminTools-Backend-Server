@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py create_missing_profiles %% gunicorn -t 120 main.wsgi",
+        "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py create_missing_profiles && gunicorn -t 120 main.wsgi",
         "restartPolicyType": "NEVER",
         "restartPolicyMaxRetries": 10
     }
