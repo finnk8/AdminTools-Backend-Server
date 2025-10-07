@@ -17,12 +17,19 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "https://api.admin-tools.klusmo.de",
+]
 
 # Edit the following line and place your railway URL, and your custom URL in the array.
 CSRF_TRUSTED_ORIGINS = [
-    "https://api.admin-tools.de",
-    "https://app.admin-tools.de",
+    "https://api.admin-tools.klusmo.de",
+    "https://admin-tools.klusmo.de",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://api.admin-tools.klusmo.de",
+    "https://admin-tools.klusmo.de",
 ]
 
 # Application definition
@@ -85,13 +92,13 @@ WSGI_APPLICATION = "main.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.environ["PGDATABASE"],
-        "USER": os.environ["PGUSER"],
-        "PASSWORD": os.environ["PGPASSWORD"],
-        "HOST": os.environ["PGHOST"],
-        "PORT": os.environ["PGPORT"],
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'scorydb',
+        'USER': 'scoryuser',
+        'PASSWORD': 'supersecret',
+        'HOST': 'admintools-db',     # der Service-Name aus dem Stack-File
+        'PORT': '3306',
     }
 }
 
@@ -171,11 +178,6 @@ SIMPLE_JWT = {
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'profiles.serializers.CustomUserSerializer',
 }
-
-CORS_ALLOWED_ORIGINS = [
-    "https://api.admin-tools.de",
-    "https://app.admin-tools.de",
-]
 
 LOGGING = {
     'version': 1,
