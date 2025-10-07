@@ -25,7 +25,7 @@ RUN python manage.py makemigrations --noinput
 
 # Port für Gunicorn exposed (Standard 8000)
 EXPOSE 8000
-ENV DJANGO_SETTINGS_MODULE=server.settings
+ENV DJANGO_SETTINGS_MODULE=main.settings
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
