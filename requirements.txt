@@ -28,7 +28,7 @@ oauthlib==3.3.1
 packaging==25.0
 pandas==2.3.3
 pillow==11.3.0
-psycopg2==2.9.10
+psycopg2-binary==2.9.10
 pycparser==2.23
 pyinstaller==6.16.0
 pyinstaller-hooks-contrib==2025.9
