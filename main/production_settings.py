@@ -18,6 +18,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    "api.admin-tools.klusmo.de",
     "https://api.admin-tools.klusmo.de",
 ]
 
@@ -25,11 +26,15 @@ ALLOWED_HOSTS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://api.admin-tools.klusmo.de",
     "https://admin-tools.klusmo.de",
+    "api.admin-tools.klusmo.de",
+    "admin-tools.klusmo.de",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://api.admin-tools.klusmo.de",
     "https://admin-tools.klusmo.de",
+    "api.admin-tools.klusmo.de",
+    "admin-tools.klusmo.de",
 ]
 
 # Application definition
