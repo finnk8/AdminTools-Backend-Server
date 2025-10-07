@@ -26,15 +26,15 @@ ALLOWED_HOSTS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://api.admin-tools.klusmo.de",
     "https://admin-tools.klusmo.de",
-    "api.admin-tools.klusmo.de",
-    "admin-tools.klusmo.de",
+    "http://api.admin-tools.klusmo.de",
+    "http://admin-tools.klusmo.de",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://api.admin-tools.klusmo.de",
     "https://admin-tools.klusmo.de",
-    "api.admin-tools.klusmo.de",
-    "admin-tools.klusmo.de",
+    "http://api.admin-tools.klusmo.de",
+    "http://admin-tools.klusmo.de",
 ]
 
 # Application definition
