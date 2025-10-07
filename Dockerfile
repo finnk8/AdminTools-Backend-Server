@@ -32,4 +32,4 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Gunicorn starten (Standard-Port 8000, Host 0.0.0.0)
-CMD ["gunicorn", "main.wsgi", "--timeout", "300", "--workers", "2"]
+CMD ["gunicorn", "main.wsgi", "--timeout", "300", "--workers", "2", "--bind", "0.0.0.0:8000"]
