@@ -1,19 +1,19 @@
 FROM python:3.13-slim
 
+
+# Build-Deps für mysqlclient
+RUN apk add --no-cache \
+      mariadb-connector-c-dev \
+      gcc \
+      musl-dev \
+      python3-dev
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
 COPY requirements.txt .
-
-RUN apk add --no-cache \
-      build-base \
-      gfortran \
-      musl-dev \
-      freetype-dev \
-      libpng-dev \
-      pkgconfig
 
 RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
 
