@@ -1,4 +1,5 @@
-FROM python:alpine
+FROM python:3.13-slim
+
 
 # Build-Deps für mysqlclient
 RUN apk add --no-cache \
@@ -22,7 +23,7 @@ RUN apk add --no-cache \
       libpng-dev \
       pkgconfig
 
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
 
 COPY . .
 
