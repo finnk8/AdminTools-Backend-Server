@@ -22,6 +22,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",]
 
 # Application definition
 
@@ -137,7 +139,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Djoser settings
 
 DJOSER = {
-    'USER_CREATE': False,
+    'USER_CREATE': True,
     'SERIALIZERS': {
         'user': 'profiles.serializers.CustomUserSerializer',
         'current_user': 'profiles.serializers.CustomUserSerializer',  # for /me/ route

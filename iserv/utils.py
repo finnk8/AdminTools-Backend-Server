@@ -1,4 +1,5 @@
 import csv, os
+import time
 from django.conf import settings
 from django.http import JsonResponse
 from difflib import SequenceMatcher
@@ -8,6 +9,7 @@ from .models import IservGroup, ExistingAccount
 
 
 def process_iserv_exported_users_csv(file_name):
+    print(f"Starte die Verarbeitung der Datei {file_name}... {time.time()}")
     try:
         return_accounts = [] # Hier wird die Liste der neuen Accounts gespeichert, die in der CSV-Datei gefunden wurden
         return_groups = [] # Hier wird die Liste der neuen Gruppen gespeichert, die in der CSV-Datei gefunden wurden
@@ -17,7 +19,7 @@ def process_iserv_exported_users_csv(file_name):
             next(reader)  # Springe zur zweiten Zeile, um die Header-Zeile zu überspringen
             
             for row in reader:
-                account, first_name, last_name, status, created_at, created_by, internal_id, user_type, import_id, class_information, email, groups_str = row
+                account, first_name, last_name, status, created_at, created_by, internal_id, user_type, import_id, class_information, date_of_birth, email, groups_str = row
                 gruppen_data = groups_str.split(',')
                 
                 # Speichern der Gruppen
@@ -50,6 +52,7 @@ def process_iserv_exported_users_csv(file_name):
         
         extracted_accounts = ExistingAccountSerializer(return_accounts, many=True).data
         extracted_groups = IservGroupSerializer(list(dict.fromkeys(return_groups)), many=True).data
+        print(f"Die Verarbeitung der Datei {file_name} wurde abgeschlossen. {time.time()}")
 
         # Clean up accounts, so no data is left behind
         for account in return_accounts:

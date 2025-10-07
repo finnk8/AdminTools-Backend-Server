@@ -5,7 +5,7 @@ from profiles.models import UserProfile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['iserv_domain']  # Add more fields as needed
+        fields = ['iserv_domain', 'school']  # Add more fields as needed
 
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()  # Allow profile updates
