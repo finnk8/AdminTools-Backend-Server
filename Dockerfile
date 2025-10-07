@@ -14,7 +14,15 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install -r requirements.txt --no-cache-dir
+RUN apk add --no-cache \
+      build-base \
+      gfortran \
+      musl-dev \
+      freetype-dev \
+      libpng-dev \
+      pkgconfig
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
 
